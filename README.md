@@ -1,7 +1,7 @@
 # Trivia API
-[![made-with-python](https://img.shields.io/badge/Backend-Python-1f425f.svg)](https://www.python.org/)
-[![made-with-reactjs](https://img.shields.io/badge/Frontend-ReactJS-61DBFB.svg)](https://reactjs.org/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
+[![made-with-python](https://img.shields.io/badge/Backend-Python-1F425F.svg)](https://www.python.org/)
+[![made-with-reactjs](https://img.shields.io/badge/Frontend-ReactJS-06B3E1.svg)](https://reactjs.org/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-2AAD2A.svg)](https://opensource.org/licenses/MIT)
 
 This is a Trivia API that provides trivial questions you can play and divided into categories.
 
