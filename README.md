@@ -80,69 +80,117 @@ curl -X GET http://127.0.0.1:5000/questions
 
 ```json
 {
+  "categories": [
+    {
+      "id": 1, 
+      "type": "Sports"
+    }, 
+    {
+      "id": 2, 
+      "type": "Technology"
+    }, 
+    {
+      "id": 3, 
+      "type": "Movies"
+    }, 
+    {
+      "id": 4, 
+      "type": "Food"
+    }, 
+    {
+      "id": 5, 
+      "type": "General"
+    }, 
+    {
+      "id": 6, 
+      "type": "Music"
+    }, 
+    {
+      "id": 7, 
+      "type": "Video-Games"
+    }, 
+    {
+      "id": 8, 
+      "type": "Geography"
+    }, 
+    {
+      "id": 9, 
+      "type": "Science"
+    }
+  ], 
   "questions": [
     {
-      "question": "How are you?", 
-      "answer": "Fine", 
-      "category": "General", 
-      "difficulty": 2
+      "answer": "11", 
+      "category": "Sports", 
+      "difficulty": 3, 
+      "id": 1, 
+      "question": "How many players are in a soccer team?"
     }, 
     {
-      "question": "How are you?", 
-      "answer": "Fine", 
-      "category": "General", 
-      "difficulty": 2
+      "answer": "Avengers: Endgame", 
+      "category": "Movies", 
+      "difficulty": 2, 
+      "id": 2, 
+      "question": "What is the highest-grossing film of all time without taking inflation into account?"
     }, 
     {
-      "question": "How are you?", 
-      "answer": "Fine", 
-      "category": "General", 
-      "difficulty": 2
+      "answer": "Simple Mail Transport Protocol", 
+      "category": "Technology", 
+      "difficulty": 3, 
+      "id": 3, 
+      "question": "What does the acronym SMTP represent?"
     }, 
     {
-      "question": "How are you?", 
-      "answer": "Fine", 
+      "answer": "Neil Armstrong", 
       "category": "General", 
-      "difficulty": 2
+      "difficulty": 2, 
+      "id": 4, 
+      "question": "Who was the first American astronaut to step foot on the moon?"
     }, 
     {
-      "question": "How are you?", 
-      "answer": "Fine", 
-      "category": "General", 
-      "difficulty": 2
-    },
-    {
-      "question": "How are you?", 
-      "answer": "Fine", 
-      "category": "General", 
-      "difficulty": 2
+      "answer": "Carrot", 
+      "category": "Food", 
+      "difficulty": 1, 
+      "id": 5, 
+      "question": "What vegetable is known to help you see in the dark?"
     }, 
     {
-      "question": "How are you?", 
-      "answer": "Fine", 
-      "category": "General", 
-      "difficulty": 2
+      "answer": "Bill Gates", 
+      "category": "Technology", 
+      "difficulty": 1, 
+      "id": 6, 
+      "question": "Who founded Microsoft?"
     }, 
     {
-      "question": "How are you?", 
-      "answer": "Fine", 
+      "answer": "Chinese", 
       "category": "General", 
-      "difficulty": 2
+      "difficulty": 2, 
+      "id": 7, 
+      "question": "What language is the most popularly spoken worldwide?"
     }, 
     {
-      "question": "How are you?", 
-      "answer": "Fine", 
-      "category": "General", 
-      "difficulty": 2
+      "answer": "Chickpeas", 
+      "category": "Food", 
+      "difficulty": 3, 
+      "id": 8, 
+      "question": "What is hummus made from?"
     }, 
     {
-      "question": "How are you?", 
-      "answer": "Fine", 
-      "category": "General", 
-      "difficulty": 2
+      "answer": "Chile", 
+      "category": "Geography", 
+      "difficulty": 3, 
+      "id": 9, 
+      "question": "Which country occupies half of South America\u2019s western coast?"
+    }, 
+    {
+      "answer": "9", 
+      "category": "Sports", 
+      "difficulty": 2, 
+      "id": 10, 
+      "question": "How many players are there on a baseball team?"
     }
-  ],
-  "success": true,
+  ], 
+  "success": true, 
   "total_questions": 25
 }
 ```
@@ -154,20 +202,21 @@ Creates a new question by submitting the information for a question, answer, its
 * Sample Request:
 
 ```
-curl -X POST -H "Content-Type: application/json" -d '{"question":"How are you?", "answer":"Fine", "category":"General", "difficulty":"2"}' http://127.0.0.1:5000/questions
+curl -X POST -H "Content-Type: application/json" -d '{"question":"What 1994 crime film revitalized John Travolta’s career?", "answer":"Pulp Fiction", "category":"Movies", "difficulty":"3"}' http://127.0.0.1:5000/questions
 ```
 
 * Sample Response:
 
 ```json
 {
-  "questions": {
-    "questions": "How are you?",
-    "answer": "Fine",
-    "category": "General",
-    "difficulty": 2
-  },
   "created_question_id": 26,
+  "questions": {
+    "answer": "Pulp Fiction",
+    "category": "Movies",
+    "difficulty": 3,
+    "id": 26,
+    "question": "What 1994 crime film revitalized John Travolta\u2019s career?"
+  },
   "success": true,
   "total_questions": 26
 }
@@ -187,69 +236,79 @@ curl -X DELETE http://127.0.0.1:5000/questions/26
 
 ```json
 {
+  "deleted": 26,
   "questions": [
     {
-      "question": "How are you?", 
-      "answer": "Fine", 
-      "category": "General", 
-      "difficulty": 2
+      "answer": "11", 
+      "category": "Sports", 
+      "difficulty": 3, 
+      "id": 1, 
+      "question": "How many players are in a soccer team?"
     }, 
     {
-      "question": "How are you?", 
-      "answer": "Fine", 
-      "category": "General", 
-      "difficulty": 2
+      "answer": "Avengers: Endgame", 
+      "category": "Movies", 
+      "difficulty": 2, 
+      "id": 2, 
+      "question": "What is the highest-grossing film of all time without taking inflation into account?"
     }, 
     {
-      "question": "How are you?", 
-      "answer": "Fine", 
-      "category": "General", 
-      "difficulty": 2
+      "answer": "Simple Mail Transport Protocol", 
+      "category": "Technology", 
+      "difficulty": 3, 
+      "id": 3, 
+      "question": "What does the acronym SMTP represent?"
     }, 
     {
-      "question": "How are you?", 
-      "answer": "Fine", 
+      "answer": "Neil Armstrong", 
       "category": "General", 
-      "difficulty": 2
+      "difficulty": 2, 
+      "id": 4, 
+      "question": "Who was the first American astronaut to step foot on the moon?"
     }, 
     {
-      "question": "How are you?", 
-      "answer": "Fine", 
-      "category": "General", 
-      "difficulty": 2
-    },
-    {
-      "question": "How are you?", 
-      "answer": "Fine", 
-      "category": "General", 
-      "difficulty": 2
+      "answer": "Carrot", 
+      "category": "Food", 
+      "difficulty": 1, 
+      "id": 5, 
+      "question": "What vegetable is known to help you see in the dark?"
     }, 
     {
-      "question": "How are you?", 
-      "answer": "Fine", 
-      "category": "General", 
-      "difficulty": 2
+      "answer": "Bill Gates", 
+      "category": "Technology", 
+      "difficulty": 1, 
+      "id": 6, 
+      "question": "Who founded Microsoft?"
     }, 
     {
-      "question": "How are you?", 
-      "answer": "Fine", 
+      "answer": "Chinese", 
       "category": "General", 
-      "difficulty": 2
+      "difficulty": 2, 
+      "id": 7, 
+      "question": "What language is the most popularly spoken worldwide?"
     }, 
     {
-      "question": "How are you?", 
-      "answer": "Fine", 
-      "category": "General", 
-      "difficulty": 2
+      "answer": "Chickpeas", 
+      "category": "Food", 
+      "difficulty": 3, 
+      "id": 8, 
+      "question": "What is hummus made from?"
     }, 
     {
-      "question": "How are you?", 
-      "answer": "Fine", 
-      "category": "General", 
-      "difficulty": 2
+      "answer": "Chile", 
+      "category": "Geography", 
+      "difficulty": 3, 
+      "id": 9, 
+      "question": "Which country occupies half of South America\u2019s western coast?"
+    }, 
+    {
+      "answer": "9", 
+      "category": "Sports", 
+      "difficulty": 2, 
+      "id": 10, 
+      "question": "How many players are there on a baseball team?"
     }
-  ],
-  "deleted": 26,
+  ], 
   "success": true,
   "total_questions": 25
 }
