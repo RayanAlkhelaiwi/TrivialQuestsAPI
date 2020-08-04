@@ -1,9 +1,11 @@
-import os, random
+import os
+import random
 from flask import Flask, request, abort, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 
 from models import setup_db, Question, Category
+
 
 def create_app(test_config=None):
     # create and configure the app
@@ -16,19 +18,21 @@ def create_app(test_config=None):
     CORS(app)
     # CORS(app, resources={r'*/api/*':{origins: '*'}})
 
-
     '''
     [Complete] TODO: Use the after_request decorator to set Access-Control-Allow
     '''
     @app.after_request
     def after_request(response):
-        response.headers.add('Access-Control-Allow-Headers', 'Content-Type, Authorization, true')
-        response.headers.add('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS')
-        
+        response.headers.add('Access-Control-Allow-Headers',
+                             'Content-Type, Authorization, true')
+        response.headers.add('Access-Control-Allow-Methods',
+                             'GET, POST, PUT, PATCH, DELETE, OPTIONS')
+
         return response
 
     # To specify the number of items (questions and/or categories) to display per page
     items_per_page = 10
+
     def pagination(request, selection):
         page = request.args.get('page', 1, type=int)
         start = (page - 1) * items_per_page
@@ -38,7 +42,7 @@ def create_app(test_config=None):
         current_items = items[start:end]
 
         return current_items
-    
+
     '''
     [Complete] TODO: 
     Create an endpoint to handle GET requests 
@@ -162,7 +166,7 @@ def create_app(test_config=None):
 
             else:
                 question = Question(question=new_question, answer=new_answer,
-                            category=new_category, difficulty=int(new_difficulty))
+                                    category=new_category, difficulty=int(new_difficulty))
                 question.insert()
 
                 return jsonify({
@@ -174,7 +178,6 @@ def create_app(test_config=None):
 
         except:
             unprocessable(422)
-
 
     '''
     [Complete] TODO: 
@@ -201,7 +204,8 @@ def create_app(test_config=None):
     @app.route('/categories/<category_type>/questions')
     def get_questions_by_category(category_type):
 
-        selection = Question.query.filter(Question.category == category_type).all()
+        selection = Question.query.filter(
+            Question.category == category_type).all()
         current_questions = pagination(request, selection)
 
         if len(current_questions) == 0:
@@ -237,12 +241,12 @@ def create_app(test_config=None):
 
         if previous_questions is None or category is None:
             return not_found(404)
-        
+
         if category['id'] == 0:
             questions = Question.query.all()
         else:
             questions = Question.query.filter(category == category['id']).all()
-        
+
         total_current_questions = len(questions)
 
         def had_question(question):
