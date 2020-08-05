@@ -195,6 +195,63 @@ curl -X GET http://127.0.0.1:5000/questions
 }
 ```
 
+**GET /categories**
+
+Returns a list of categories objects, success value and total number of categories. Results are paginated in groups of 10. Include a query argument to choose page number (e.g. `?page=1`).
+
+* Sample Request:
+
+```
+curl -X GET http://127.0.0.1:5000/categories
+```
+
+* Sample Response:
+
+```json
+{
+  "categories": [
+    {
+      "id": 1,
+      "type": "Sports"
+    },
+    {
+      "id": 2,
+      "type": "Technology"
+    },
+    {
+      "id": 3,
+      "type": "Movies"
+    },
+    {
+      "id": 4,
+      "type": "Food"
+    },
+    {
+      "id": 5,
+      "type": "General"
+    },
+    {
+      "id": 6,
+      "type": "Music"
+    },
+    {
+      "id": 7,
+      "type": "Video-Games"
+    },
+    {
+      "id": 8,
+      "type": "Geography"
+    },
+    {
+      "id": 9,
+      "type": "Science"
+    }
+  ],
+  "success": true,
+  "total_categories": 9
+}
+```
+
 **POST /questions**
 
 Creates a new question by submitting the information for a question, answer, its category and difficulty. It returns the ID of the newely created question in the DB, the submitted information, success value, number of total questions.
