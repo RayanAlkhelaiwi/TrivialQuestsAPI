@@ -6,6 +6,17 @@ from flask_cors import CORS
 
 from models import setup_db, Question, Category
 
+# To specify the number of items of both questions and categories to display per page
+items_per_page = 10
+def pagination(request, selection):
+    page = request.args.get('page', 1, type=int)
+    start = (page - 1) * items_per_page
+    end = start + items_per_page
+
+    items = [item.format() for item in selection]
+    current_items = items[start:end]
+
+    return current_items
 
 def create_app(test_config=None):
     # create and configure the app
@@ -26,22 +37,9 @@ def create_app(test_config=None):
         response.headers.add('Access-Control-Allow-Headers',
                              'Content-Type, Authorization, true')
         response.headers.add('Access-Control-Allow-Methods',
-                             'GET, POST, PUT, PATCH, DELETE, OPTIONS')
+                             'GET, POST, PATCH, DELETE, OPTIONS')
 
         return response
-
-    # To specify the number of items (questions and/or categories) to display per page
-    items_per_page = 10
-
-    def pagination(request, selection):
-        page = request.args.get('page', 1, type=int)
-        start = (page - 1) * items_per_page
-        end = start + items_per_page
-
-        items = [item.format() for item in selection]
-        current_items = items[start:end]
-
-        return current_items
 
     '''
     [Complete] TODO: 
@@ -52,8 +50,8 @@ def create_app(test_config=None):
     @app.route('/categories')
     def get_categories():
 
-        selection = Category.query.order_by(Category.id).all()
-        current_categories = pagination(request, selection)
+        categories_selection = Category.query.order_by(Category.id).all()
+        current_categories = {selected_category.id: selected_category.type for selected_category in categories_selection}
 
         if len(current_categories) == 0:
             return not_found(404)
@@ -84,7 +82,8 @@ def create_app(test_config=None):
         current_questions = pagination(request, question_selection)
 
         categories_selection = Category.query.order_by(Category.id).all()
-        current_categories = pagination(request, categories_selection)
+        current_categories = {selected_category.id: selected_category.type for selected_category in categories_selection}
+        # current_categories = pagination(request, categories_selection)
 
         if len(current_questions) == 0:
             return not_found(404)
@@ -133,7 +132,7 @@ def create_app(test_config=None):
     which will require the question and answer text, 
     category, and difficulty score.
 
-    TEST: When you submit a question on the "Add" tab, 
+    [Complete] TEST: When you submit a question on the "Add" tab, 
     the form will clear and the question will appear at the end of the last page
     of the questions list in the "List" tab.  
     '''
@@ -147,7 +146,7 @@ def create_app(test_config=None):
         new_answer = body.get('answer', None)
         new_category = body.get('category', None)
         new_difficulty = body.get('difficulty', None)
-        search = body.get('search', None)
+        search = body.get('searchTerm', None)
 
         try:
             if search:
@@ -155,8 +154,8 @@ def create_app(test_config=None):
                     Question.question.ilike('%{}%'.format(search))).all()
                 current_questions = pagination(request, selection)
 
-                if current_questions == []:
-                    current_questions = 0
+                if len(current_questions) == 0:
+                    return not_found(404)
 
                 return jsonify({
                     'success': True,
@@ -185,7 +184,7 @@ def create_app(test_config=None):
     It should return any questions for whom the search term 
     is a substring of the question. 
 
-    TEST: Search by any phrase. The questions list will update to include 
+    [Complete] TEST: Search by any phrase. The questions list will update to include 
     only question that include that string within their question. 
     Try using the word "title" to start. 
     '''
@@ -236,43 +235,27 @@ def create_app(test_config=None):
 
         body = request.get_json()
 
-        previous_questions = body.get('previous_questions')
-        category = body.get('questions_category')
+        try:
+            category = body.get('quiz_category', None)
+            previous_questions = body.get('previous_questions', None)
 
-        if previous_questions is None or category is None:
-            return not_found(404)
+            if previous_questions is None or category is None:
+                return bad_request(400)
 
-        if category['id'] == 0:
-            questions = Question.query.all()
-        else:
-            questions = Question.query.filter(category == category['id']).all()
+            if category['id'] == 0:
+                questions = Question.query.all()
+            else:
+                questions = Question.query.filter(category == category['id']).all()
 
-        total_current_questions = len(questions)
+            if questions:
+                random_question = random.choice(questions)
 
-        def had_question(question):
-            questioned = False
-            for to_check_question in previous_questions:
-                if to_check_question == question.id:
-                    questioned = True
-
-            return questioned
-
-        random_question = questions[random.randrange(
-            0, total_current_questions), 1]
-
-        while(had_question(random_question)):
-            random_question = questions[random.randrange(
-                0, total_current_questions), 1]
-
-        if len(previous_questions) == total_current_questions:
             return jsonify({
-                'success': True
+                'success': True,
+                'question': random_question.format()
             })
-
-        return jsonify({
-            'success': True,
-            'question': random_question.format()
-        })
+        except:
+            unprocessable(422)
 
     '''
     [Complete] TODO: 
