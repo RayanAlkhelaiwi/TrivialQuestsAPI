@@ -43,7 +43,7 @@ class TriviaTestCase(unittest.TestCase):
     Write at least one test for each test for successful operation and for expected errors.
     """
 
-    def test_get_paginated_categories(self):
+    def test_get_categories(self):
         """ Test for getting successful paginated categories """
 
         res = self.client().get('/categories')
@@ -53,17 +53,6 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(data['success'], True)
         self.assertTrue(data['total_categories'])
         self.assertTrue(len(data['categories']))
-
-    def test_404_get_paginated_categories_beyond_valid_pagination(self):
-        """ Test for 404 getting paginated categories beyond valid pagination """
-
-        res = self.client().get('/categories?page=1000',
-                                json={'type': 'Technology'})
-        data = json.loads(res.data)
-
-        self.assertEqual(res.status_code, 404)
-        self.assertEqual(data['success'], False)
-        self.assertEqual(data['message'], 'Not Found')
 
     def test_get_paginated_questions(self):
         """ Test for getting successful paginated questions """
@@ -90,7 +79,7 @@ class TriviaTestCase(unittest.TestCase):
         """ Test for deleting a question """
 
         #! Increment question_id before execution
-        question_id = 3
+        question_id = 14
 
         res = self.client().delete('/questions/' + str(question_id))
         data = json.loads(res.data)
@@ -141,7 +130,7 @@ class TriviaTestCase(unittest.TestCase):
     def test_search_question_with_results(self):
         """ Test for searching a questions with results returned """
 
-        res = self.client().post('/questions', json={'search': 'What'})
+        res = self.client().post('/questions', json={'searchTerm': 'What'})
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 200)
@@ -153,13 +142,12 @@ class TriviaTestCase(unittest.TestCase):
         """ Test for searching a question that returns no results """
 
         res = self.client().post(
-            '/questions', json={'search': 'Prooggraammiing'})
+            '/questions', json={'searchTerm': 'Prooggraammiing'})
         data = json.loads(res.data)
 
-        self.assertEqual(res.status_code, 200)
-        self.assertEqual(data['success'], True)
-        self.assertEqual(data['questions'], 0)
-        self.assertEqual(data['total_questions'], 0)
+        self.assertEqual(res.status_code, 404)
+        self.assertEqual(data['success'], False)
+        self.assertEqual(data['message'], 'Not Found')
 
     def test_get_questions_by_category(self):
         """ Test for getting questions by category """
