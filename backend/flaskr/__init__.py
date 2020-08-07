@@ -124,7 +124,7 @@ def create_app(test_config=None):
             })
 
         except:
-            unprocessable(422)
+            return unprocessable(422)
 
     '''
     [Complete] TODO: 
@@ -176,7 +176,7 @@ def create_app(test_config=None):
                 })
 
         except:
-            unprocessable(422)
+            return unprocessable(422)
 
     '''
     [Complete] TODO: 
@@ -255,7 +255,7 @@ def create_app(test_config=None):
                 'question': random_question.format()
             })
         except:
-            unprocessable(422)
+            return unprocessable(422)
 
     '''
     [Complete] TODO: 
