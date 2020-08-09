@@ -75,6 +75,10 @@ def create_app(test_config=None):
     Clicking on the page numbers should update the questions. 
     '''
 
+    @app.route('/')
+    def index():
+        return get_questions()
+
     @app.route('/questions')
     def get_questions():
 
@@ -146,34 +150,18 @@ def create_app(test_config=None):
         new_answer = body.get('answer', None)
         new_category = body.get('category', None)
         new_difficulty = body.get('difficulty', None)
-        search = body.get('searchTerm', None)
 
         try:
-            if search:
-                selection = Question.query.order_by(Question.id).filter(
-                    Question.question.ilike('%{}%'.format(search))).all()
-                current_questions = pagination(request, selection)
+            question = Question(question=new_question, answer=new_answer,
+                                category=new_category, difficulty=int(new_difficulty))
+            question.insert()
 
-                if len(current_questions) == 0:
-                    return not_found(404)
-
-                return jsonify({
-                    'success': True,
-                    'questions': current_questions,
-                    'total_questions': len(selection)
-                })
-
-            else:
-                question = Question(question=new_question, answer=new_answer,
-                                    category=new_category, difficulty=int(new_difficulty))
-                question.insert()
-
-                return jsonify({
-                    'success': True,
-                    'created_question_id': question.id,
-                    'questions': question.format(),
-                    'total_questions': len(Question.query.all())
-                })
+            return jsonify({
+                'success': True,
+                'created_question_id': question.id,
+                'questions': question.format(),
+                'total_questions': len(Question.query.all())
+            })
 
         except:
             return unprocessable(422)
@@ -190,6 +178,28 @@ def create_app(test_config=None):
     '''
 
     # Done along with create_question endpoint
+    @app.route('/search', methods=['POST'])
+    def search_questions():
+        
+        body = request.get_json()
+        search = body.get('searchTerm', None)
+
+        try:
+            selection = Question.query.order_by(Question.id).filter(
+                Question.question.ilike('%{}%'.format(search))).all()
+            current_questions = pagination(request, selection)
+
+            if len(current_questions) == 0:
+                return not_found(404)
+
+            return jsonify({
+                'success': True,
+                'questions': current_questions,
+                'total_questions': len(selection)
+            })
+
+        except:
+            return unprocessable(422)
 
     '''
     [Complete] TODO: 
