@@ -79,7 +79,7 @@ class TriviaTestCase(unittest.TestCase):
         """ Test for deleting a question """
 
         #! Increment question_id before execution
-        question_id = 14
+        question_id = 16
 
         res = self.client().delete('/questions/' + str(question_id))
         data = json.loads(res.data)
@@ -130,7 +130,7 @@ class TriviaTestCase(unittest.TestCase):
     def test_search_question_with_results(self):
         """ Test for searching a questions with results returned """
 
-        res = self.client().post('/questions', json={'searchTerm': 'What'})
+        res = self.client().post('/search', json={'searchTerm': 'What'})
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 200)
@@ -142,7 +142,7 @@ class TriviaTestCase(unittest.TestCase):
         """ Test for searching a question that returns no results """
 
         res = self.client().post(
-            '/questions', json={'searchTerm': 'Prooggraammiing'})
+            '/search', json={'searchTerm': 'Prooggraammiing'})
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 404)
