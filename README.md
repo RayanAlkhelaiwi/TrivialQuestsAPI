@@ -3,7 +3,7 @@
 [![made-with-reactjs](https://img.shields.io/badge/Frontend-ReactJS-06B3E1.svg)](https://reactjs.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-Green.svg)](https://opensource.org/licenses/MIT)
 
-This is a Trivia API that provides trivial questions you can play and divided into categories.
+A backend API with a React frontend that provides categorized trivia questions you can play.
 
 The backend code follows [PEP-8 style guidelines](https://www.python.org/dev/peps/pep-0008/).
 
